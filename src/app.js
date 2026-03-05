@@ -5,6 +5,7 @@ const rateLimit = require('express-rate-limit');
 const config = require('./config');
 const authMiddleware = require('./middleware/auth');
 const convertRoutes = require('./routes/convert');
+const convertFastRoutes = require('./routes/convertFast');
 const healthRoutes = require('./routes/health');
 
 const app = express();
@@ -42,6 +43,7 @@ app.use('/api/health', healthRoutes);
 
 // ─── Rutas protegidas por API Key ───────────────────────
 app.use('/api/convert', authMiddleware, convertRoutes);
+app.use('/api/convert-fast', authMiddleware, convertFastRoutes);
 
 // ─── Ruta raíz ──────────────────────────────────────────
 app.get('/', (req, res) => {
@@ -52,6 +54,7 @@ app.get('/', (req, res) => {
         endpoints: {
             health: 'GET  /api/health',
             convert: 'POST /api/convert',
+            convertFast: 'POST /api/convert-fast',
         },
         auth: 'Envía tu API Key en el header "x-api-key".',
         docs: {
@@ -71,6 +74,20 @@ app.get('/', (req, res) => {
                     fullPage: true,
                     transparent: false,
                     selector: null,
+                    responseType: 'buffer | base64',
+                },
+            },
+            convertFast: {
+                method: 'POST',
+                url: '/api/convert-fast',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-api-key': 'TU_API_KEY',
+                },
+                body: {
+                    svg: '<svg xmlns="http://www.w3.org/2000/svg" width="400" height="200"><rect width="400" height="200" fill="{{COLOR}}"/><text x="20" y="50" font-size="24" fill="#fff">{{TITULO}}</text></svg>',
+                    variables: { TITULO: 'Mi gran proyecto', COLOR: '#ff0000' },
+                    density: 300,
                     responseType: 'buffer | base64',
                 },
             },

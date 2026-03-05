@@ -24,6 +24,7 @@
     "express-rate-limit": "^8.2.1",
     "helmet": "^8.1.0",
     "puppeteer": "^24.38.0",
+    "sharp": "^0.34.5",
     "uuid": "^13.0.0"
   }
 }
